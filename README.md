@@ -44,58 +44,5 @@ then `cd` into test directory  and run `git status` you should see something lik
 ```bash 
 On branch master No commits yet nothing to commit (create/copy files and use "git add" to track)
 ```
-```
-```
 currently only one feature as been added initializing of empty repository
-
-
-
-
-
-
-
-
-
-
-
-# arch-git
-
-
-It's Generally believe that Linux Trovald took 5 days to build git 
-well I might take longer then that considering my skill issues in rust 
-
-## What is arch-git 
-
-It a version control similar to git with added juice
-
-To get started clone this repo 
-```bash
-git clone git@github.com:sir-george2500/arch-git.git
-```
-then run the below command to build your project 
-
-```bash 
-cargo build 
-```
-
-then run this command to run your project
-
-```bash 
- ./target/debug/arch-git init test
-```
-
-then `cd` into test and run `git status` you should see something like the below 
-
-```bash 
-On branch master No commits yet nothing to commit (create/copy files and use "git add" to track)
-```
-```
-```
-currently only one feature as been added initializing of empty repository
-
-
-```
-```
-```
-```
 
