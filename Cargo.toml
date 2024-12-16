@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-
+flate2 = "1.0" # For Zlib compression
+sha1 = "0.10"  # For SHA-1 hashing
 [dev-dependencies]
 arch-git = { path = "." }
