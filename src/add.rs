@@ -7,8 +7,10 @@ use std::io::{self, Read, Write};
 use std::path::Path;
 
 pub fn add(file_paths: &[&str]) -> io::Result<()> {
-    //check if the .git repository exist
+    // Check if the .git repository exists
     let git_dir = Path::new(".git");
+    println!(".git exists: {}", git_dir.exists()); // Debug print to check if .git exists
+
     if !git_dir.exists() {
         return Err(io::Error::new(
             io::ErrorKind::NotFound,
@@ -16,22 +18,21 @@ pub fn add(file_paths: &[&str]) -> io::Result<()> {
         ));
     }
 
+    // The rest of the function remains unchanged
     let object_dir = git_dir.join("objects");
     let index = git_dir.join("index");
 
     for file_path in file_paths {
-        // Read all the content in the file path
+        // Process files (same as before)
         let mut file = File::open(&file_path)?;
         let mut content = Vec::new();
         file.read_to_end(&mut content)?;
 
-        // Compute the SHA-1 Hash
         let mut hasher = Sha1::new();
         hasher.update(&content);
         let hash = hasher.finalize();
         let hash_hex = format!("{:x}", hash);
 
-        // prepare the .git/objects directory
         let sub_dir = object_dir.join(&hash_hex[0..2]);
         let object_file = sub_dir.join(&hash_hex[2..]);
 
@@ -39,7 +40,6 @@ pub fn add(file_paths: &[&str]) -> io::Result<()> {
             fs::create_dir_all(&sub_dir)?;
         }
 
-        // Write the compressed content to the object Store
         if !object_file.exists() {
             let object_header = format!("blob {}\0", content.len());
             let mut object_data = Vec::new();
@@ -54,19 +54,11 @@ pub fn add(file_paths: &[&str]) -> io::Result<()> {
             object_file.write_all(&compressed_data)?;
         }
 
-        // Update the index file!
-        let mut index_file = OpenOptions::new().read(true).write(true).open(&index)?;
-
-        // File metadata for the index
-        let file_metadata = fs::metadata(file_path)?;
-        let _mode = if file_metadata.permissions().readonly() {
-            "100644"
-        } else {
-            "100755"
-        };
-
         let relative_path = Path::new(file_path).to_str().unwrap();
-        index_file.write_all(format!("{} {}\n", hash_hex, relative_path).as_bytes())?;
+        let index_entry = format!("{} {}\n", hash_hex, relative_path);
+
+        let mut index_file = OpenOptions::new().create(true).append(true).open(&index)?;
+        index_file.write_all(index_entry.as_bytes())?;
 
         println!("Added {} to the index.", file_path);
     }

@@ -1,6 +1,7 @@
 use std::env;
 mod add;
 mod init;
+mod status;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -32,9 +33,14 @@ fn main() {
                 eprintln!("Failed to add files to the index: {}", e);
             }
         }
+        "status" => {
+            if let Err(e) = status::status() {
+                eprintln!("Failed to get repository status: {}", e);
+            }
+        }
         _ => {
             eprintln!(
-                "Unknown command: {}. Available commands: init, add",
+                "Unknown command: {}. Available commands: init, add, status",
                 command
             );
         }
