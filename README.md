@@ -44,5 +44,8 @@ then `cd` into test directory  and run `git status` you should see something lik
 ```bash 
 On branch master No commits yet nothing to commit (create/copy files and use "git add" to track)
 ```
-currently only one feature as been added initializing of empty repository
+currently there are few  features as been added 
+- Initializing of empty repository
+- Track File with the  `add` command
+- Checking Status with `status` command
 
